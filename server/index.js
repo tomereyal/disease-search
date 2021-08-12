@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv/config");
-
+const diseaseRoutes = require("./routes/disease");
+const markRoutes = require("./routes/mark");
 const app = express();
 const PORT = process.env.PORT;
 const connect = mongoose
@@ -25,6 +26,7 @@ app.use(logger("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //to parse json data from clients post requests of type application/json
+app.use(cookieParser());
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
@@ -39,7 +41,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use(cookieParser());
+app.use("/api/disease", diseaseRoutes);
+app.use("/api/mark", markRoutes);
 app.listen(PORT, () => {
   console.log(`Server is up at port:`, PORT);
 });
